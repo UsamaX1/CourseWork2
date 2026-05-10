@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CREATOR
+  CONSUMER
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         UserRole
+  createdAt    DateTime @default(now())
+
+  photos       Photo[]  @relation("PhotoCreator")
+  comments     Comment[]
+  ratings      Rating[]
+}
+
+model Photo {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+
+  title       String
+  caption     String?
+  location    String?
+  people      String[] @default([])
+
+  objectKey   String
+  thumbKey    String?
+  mimeType    String
+  byteSize    Int
+
+  creatorId   String
+  creator     User     @relation("PhotoCreator", fields: [creatorId], references: [id])
+
+  comments    Comment[]
+  ratings     Rating[]
+
+  @@index([createdAt])
+  @@index([title])
+  @@index([location])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  text      String
+
+  photoId   String
+  photo     Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade)
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([photoId, createdAt])
+}
+
+model Rating {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  value     Int
+
+  photoId   String
+  photo     Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade)
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([photoId, userId])
+  @@index([photoId])
+}
+
