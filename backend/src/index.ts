@@ -18,7 +18,15 @@ const app = Fastify({
   logger: true
 });
 
-await app.register(cors, { origin: true });
+// await app.register(cors, { origin: true });
+await app.register(cors, {
+  origin: [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "https://photoshare-frontend-new-cwcdadh2hce6eydw.francecentral-01.azurewebsites.net/"
+  ],
+  credentials: true
+});
 await app.register(rateLimit, { max: 200, timeWindow: "1 minute" });
 
 await app.register(jwt, { secret: env.JWT_SECRET });
