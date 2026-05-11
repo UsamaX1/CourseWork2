@@ -16,7 +16,7 @@ import {
   type Role
 } from "./api";
 
-type View = "consumer" | "creator";
+type View = "consumer" | "creator";  
 
 export function App() {
   const [status, setStatus] = useState<{ kind: "idle" | "loading" | "error" | "ok"; message?: string }>({
