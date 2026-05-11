@@ -14,11 +14,12 @@ export function createRedis() {
   const url = process.env.REDIS_URL;
 
   if (!url) {
-    throw new Error("REDIS_URL is not defined in environment variables");
+    throw new Error("REDIS_URL missing");
   }
 
   return new Redis(url, {
     maxRetriesPerRequest: null,
+    enableOfflineQueue: false,
     tls: {
       rejectUnauthorized: false
     }
