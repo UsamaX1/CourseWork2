@@ -22,9 +22,10 @@ const app = Fastify({
 await app.register(cors, {
   origin: [
     "http://localhost:5173",
-    "http://localhost:3000",
+    // "http://localhost:3000",
     "https://photoshare-frontend-new-cwcdadh2hce6eydw.francecentral-01.azurewebsites.net"
   ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 });
 await app.register(rateLimit, { max: 200, timeWindow: "1 minute" });
@@ -79,5 +80,11 @@ await registerPhotoRoutes(app);
 await app.ready();
 app.swagger();
 
-await app.listen({ port: env.PORT, host: "0.0.0.0" });
+// await app.listen({ port: env.PORT, host: "0.0.0.0" });
+const port = process.env.PORT || 3000;
+
+await app.listen({
+  port: Number(port),
+  host: "0.0.0.0"
+});
 
