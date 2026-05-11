@@ -30,7 +30,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
 export function getToken(): string | null {
   return localStorage.getItem("token");
-}
+}  
 
 export function setToken(token: string | null) {
   if (!token) localStorage.removeItem("token");
