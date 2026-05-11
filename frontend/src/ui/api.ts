@@ -26,7 +26,9 @@ export type PhotoDetail = Photo & {
   ratingAvg: number | null;
 };
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://photoshare-backend-aagwfchxecd7adb9.francecentral-01.azurewebsites.net";
 
 export function getToken(): string | null {
   return localStorage.getItem("token");
