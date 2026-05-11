@@ -1,10 +1,9 @@
-name: Build and deploy Node.js app to Azure Web App - photoshare-frontend1
+name: Build and deploy frontend
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -15,10 +14,9 @@ jobs:
       id-token: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "22.x"
@@ -27,20 +25,20 @@ jobs:
         working-directory: frontend
         run: npm install
 
-      - name: Build Vite app
+      - name: Build app
         working-directory: frontend
         run: npm run build
 
-      - name: Login to Azure
+      - name: Azure Login
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_BA83FECC4759487D9E1ED08FF0A5566D }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_E3307A667DAE4F2787D03022F35A9B33 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_800D52000D454F2BA294E1E64CA8810D }}
 
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure
         uses: azure/webapps-deploy@v3
         with:
-          app-name: "photoshare-frontend1"
-          slot-name: "Production"
-          package: frontend/dist
+          app-name: photoshare-frontend1
+          slot-name: Production
+          package: frontend
